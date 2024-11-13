@@ -56,10 +56,12 @@ All the files are distributed in an optimal positioning; this can say they are i
         - Nozzle: 220°
         - Build Plate: 70°
 
-        The only pieces that is totally necesary to print with supports like the Ultrasonic Case pt2 and Laser sensor case pt1, We recomen print the pieces in this configurations.
+> [!NOTE]
+> The only pieces that is totally necesary to print with supports like the Ultrasonic Case pt2 and Laser sensor case pt1, We recomen print the pieces in this configurations.
 
-        [![Whats-App-Image-2024-11-11-at-4-53-03-PM-1.jpg](https://i.postimg.cc/mrKMqxyG/Whats-App-Image-2024-11-11-at-4-53-03-PM-1.jpg)](https://postimg.cc/gwqnXT7M)
+[![Whats-App-Image-2024-11-11-at-4-53-03-PM-1.jpg](https://i.postimg.cc/mrKMqxyG/Whats-App-Image-2024-11-11-at-4-53-03-PM-1.jpg)](https://postimg.cc/gwqnXT7M)
 
-        [![Whats-App-Image-2024-11-11-at-4-53-04-PM.jpg](https://i.postimg.cc/kg1WQRVG/Whats-App-Image-2024-11-11-at-4-53-04-PM.jpg)](https://postimg.cc/HrMJHx91)
+[![Whats-App-Image-2024-11-11-at-4-53-04-PM.jpg](https://i.postimg.cc/kg1WQRVG/Whats-App-Image-2024-11-11-at-4-53-04-PM.jpg)](https://postimg.cc/HrMJHx91)
 
-        The recomended materials for this proyect are ASA and ABS for their mechanical properties, Temperature resistance and stability for this Kind of proyects that requires mechanical stress and impact resístanse.
+> [!TIP]
+> The recomended materials for this proyect are ASA and ABS for their mechanical properties, Temperature resistance and stability for this Kind of proyects that requires mechanical stress and impact resístanse.

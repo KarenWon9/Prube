@@ -1,30 +1,31 @@
 # Índice
 
-- 1.[ Introduction](#introducción)
+- 1.[ Introduction](#introduction)
     -
 - 2.[ Components](#components)
     -
     - [Materials List](#materials-list)
     - [Arduino mega](#arduino-mega)
     - [Servo motor MG90S](#servo-motor-mg90s)
-    - [Puente H (L293D)](#puente-h-l293d)
+    - [Bridge H (L293N)](#bridge-h-l293n)
     - [Pixy2 cam](#pixy2-cam)
     - [Distance sensor (ToF) VL53L0X)](#distance-sensor-tof-vl53l0x)
     - [Ultrasonic sensor (HC-S04)](#ultrasonic-sensor-hc-s04)
     - [Battery and charger](#battery-and-charger)
     - [Motor GA37-520](#motor-ga37-520)
-    - [LM2596 HW-411 Step down](#lm2596-hw-411-step-down.)
+    - [LM2596 HW-411 Step down](#lm2596-hw-411-step-down)
   
 
-- 3.[ Floors of the robot](#pisos-del-robot)
+- 3.[ Robot floors](#robot-floors)
     -
-    - [Floors 1 and 2](#piso-1-y-2)
-        - [Front axel](#tren-delantero)
-        - [Back axel](#tren-trasero)
+    - [First and Second Floor](#first-and-second-floor)
+        - [Front axel](#front-axle)
+        - [Back axel](#back-axel)
 
-    - [Floor 3]()
+    - [Third floor](#third-floor)
+    - [Fourth floor](#fourth-floor)
         
-- 4.[ 3D desing](models/README.md#3d-desing)
+- 4.[ 3D desing](models/)
     -
     - [Parts list](models/README.md#parts-list)
     - [Printing settings and recommendations](models/README.md#printing-settings-and-recommendations)
@@ -39,16 +40,28 @@
     - [Open challenge](src/Open%20challenge.ino)
     - [Close challenge](src/Close%challenge.ino)
 
-- 7.[Flowcharts](src/README.md#flowcharts)
+- 7.[ Flowcharts](src/README.md#flowcharts)
     -
     - [Open challenge](src/README.md#open-challenge)
     - [Close challenge](src/README.md#close-challenge)
     
-- 8.[Vehicle photos](v-photos/)
+- 8.[ Vehicle photos](v-photos/README.md)
+    -
+
+- 9.[Performance videos](video/README.md)
+    -
+    - [Open challenge](video/README.md#open-challenge)
+    - [Close challenge](video/README.md#close-challenge)
+
 
 <!---------------------------------------------espanol-------------------------------------------------------- -->
 
 # Introduction 
+The team Spark is a team from the Salto Angel School that is participating in the World Robot Olympiad 2024 (WRO) in the future engineers’ category. This team is comprised of three students: Victoria Saez, the new Captain who is in charge of the programming part: Sebastian Salinas, who is responsible for the designing and mechanicals of the robot: and finally Rosa Wong who attends the mechanic-electronic-documentation, is also a university student at the Rafael Urdaneta University.
+
+The World Robot Olympiad (WRO) is an event where young people from different parts of the world meet to show their knowledge and abilities in diverse categories. The future engineers' category is based on the creation of an autonomous robot capable of traveling around a game field that measures 3m x 3m using obstacles in it or without them. Every year, the rules and challenges partially change and every four or five years represents a different challenge.
+
+This report explains the components and parts of the robot built and designed by Team Spark to afford all the competition`s challenges.
 
 # Components
 
@@ -60,10 +73,9 @@
 | Pixy2 Cam                               | 1            |
 | Ultrasonic Sensor (HC-SR04)             | 2            |
 | LM7805                                  | 1            |
-| Bridge H L298D                          | 1            |
+| Bridge H L298N                          | 1            |
 | Pull-up Button                          | 1            |
 | Motor GA37-520 of 320rpm                | 1            |
-| Puente H (L298N)                        | 1            |
 | Servo Motor MG90S                       | 1            |
 | NI-MH Battery 12V 3000mAh               | 1            |
 | Condensator 10μF 50V                    | 1            |
@@ -104,7 +116,76 @@ torque than the SG90, which allows it to move the wheels with
 the necessary strength for shunting, mainly in obstacle
 evasion.
 
-## Puente H (L293D)
+### Code
+
+#### Open challenge
+To make easier its use, we employed the library `<Servo.h>` and created a variable
+called `SERVOPIN` where we put the pin that is in use, in this case, it is the 9.
+
+``` ino
+To make easier its use, we employed the library "Servo.h" and created a variable called SERVOPIN where we put the pin that is in use, in this case, it is the 9.
+
+
+#include <Servo.h> // Library to control servomotors.
+
+
+#define SERVOPIN 9 // Define the pin to the servomotor.
+
+
+#define TURNGRADE 30 // Define the turning grades to the correct direction
+#define CENTERVALUE 90 // Center value to the servomotor (straight).
+#define MAXLEFT 156 // Higher value towards the left to the servomotor.
+#define MAXRIGHT 5 // Higher value towards the right to the servomotor.
+
+
+Servo direction; // Create an instance of the servomotor.
+
+
+void center() {
+  if (DEBUG) Serial3.println("Center"); // Print "Center" if DEBUG is active.
+  direction.write(CENTERVALUE); // Place the servomotor in the central value (90 degrees).
+}
+
+
+void turnLeft() {
+  if (DEBUG) Serial3.println("Left"); // Print "Left" if DEBUG is active.
+  direction.write(MAXLEFT); // Turn the servomotor at maximum to the left.
+  direction.write(MAXLEFT); // Repeat the writing with precision.
+  setMove(500, 1, TURNSPEED); // Perform the movement with 500 ticks in direction1 (forward) to TURNSPEED.
+  center(); // Center the servomotor after the turning.
+  stop(); // Stop the movement.
+}
+
+
+void turnRight() {
+  if (DEBUG) Serial3.println("Right"); // Print "right" if DEBUG is active.
+  direction.write(MAXRIGHT); // Turn the servomotor at maximum to the right
+  direction.write(MAXRIGHT); // Repeat the writing with precision.
+  setMove(760, 1, MAXSPEED); // Perform the movement with 760 ticks in direction1 (forward) to MAXSPEED.
+  center(); // Center the servomotor after the turning.
+  stop(); // Stop the movement.
+}
+
+
+void turnGrade(int grade) {
+  if (DEBUG) Serial3.println("turnGrade " + String(CENTERVALUE + grade)); // Print the calculated turn angle.
+  direction.write(CENTERVALUE + grade); // Adjust the servomotor angle according to the specify grade.
+}
+
+```
+
+This servomotor is used the whole time to perform the turnings that are required
+during the challenges.
+
+## Bridge H (L293N)
+[![Conexiones-L298-N.png](https://i.postimg.cc/rwJKcztq/Conexiones-L298-N.png)](https://postimg.cc/zyyJFzjQ)
+
+| | | | |
+| --- | --- | --- | --- |
+| **Number of outputs**  | 4  | **Output current per channel**  | 2A - 3A peak|
+| **Working voltage**    | 5V to 35V  | **Current consumption (logical)** | 36mA  |
+
+The L293N acts as an entrepreneur between the Arduino Mega and the motor, translating the instructions into movements. Its power to manage high voltages lets us use motors with nominal voltage, without limiting the controller voltage, which increases the efficiency and potential of the robot.
 
 ## Pixy2 cam
 [![pixy-v21-camera-sensor.jpg](https://i.postimg.cc/N04gL7dH/pixy-v21-camera-sensor.jpg)](https://postimg.cc/Jysw2JVr)
@@ -121,11 +202,103 @@ The camera is capable of detecting seven colors
 simultaneously. It is equipped with an internal processor,
 which lets us explore just the necessary information for the
 Arduino or other controllers due to the variety of connections
-that allow it. Moreover, it counts with an obturation speed of
-
-60 fps, an excellent gap, and white adjustable LED lights;
+that allow it. Moreover, it counts with an obturation speed of 60 fps, an excellent gap, and white adjustable LED lights;
 thus, the continuous movement and the lower light don’t
 represent a huge problem.
+
+### Code
+
+#### Open challenge
+With the camera connected to the pins I2C of the Arduino Mega add the library
+`<Pixy2.h>`. we create a variable called `firstColorDetected` to save the first color that
+is detected and apart a variable called `colorDetected` to indicate if any color is
+detected. To start the camera pixy2 uses a `pixi.init()`, in the light of an additional
+light is needed for the perception of the colors we will implement the
+`pixy.setLamp(1, 0)` command, this will activate the camera LED lights.
+
+``` ino
+#include <Pixy2.h> 
+
+
+Pixy2 pixy; // Create an object of the Pixy2 camera.
+
+
+byte firstColorDetected = NONE; // Variable to save the first detected color.
+bool colorDetected = false; // Indicate if a color is detected.
+
+
+void flash(byte time) { //Function for indicating that the start button can be pressed 
+  for (byte i = 0; i < time; i++) {
+    pixy.setLamp(1, 0); // turn on the Pixy2 camera LED. 
+    delay(200); // Delay 200 ms
+    pixy.setLamp(0, 0); // turn off the Pixy2 camera LED
+    delay(200); // Delay 200 ms
+  }
+}
+In the case of the first color detected is blue which is assigned previously as 1, calls the function turnLeft.
+
+
+           if (pixy.ccc.numBlocks > 0) { // if the Pixy detects an object
+      stop(); // Stop the robot
+      center(); // Center the servomotor.
+      switch (pixy.ccc.blocks[0].m_signature) { // Depending on the signature of the object.
+        case BLUE: // If detect a blue object.
+          Serial3.println("BLUE"); // Print "BLUE" in the serial monitor.   
+          if (!colorDetected) { // if any color has not been detected previously.
+            colorDetected = true; // Mark color detected
+            firstColorDetected = BLUE; // Stablish the color detected as blue.
+          }
+          if (colorDetected && firstColorDetected == ORANGE) { // if orange has already been detected.
+            Go to orange; // Jump to the orange color section.
+          }
+Blue: // Tag the blue object.
+          center(); // Center the servomotor
+          readDistance(currentPosition); // Update 'currentPosition'
+          readDistance(lastPosition); // Update 'lastPosition'
+          while ((currentPosition[3] < 100)) { // While the left distance is less than 100 cm
+            followLine(SPEED2); // Follow the wall to 'SPEED2'.
+            readDistance(currentPosition); // Update 'currentPosition'
+          }
+          turnLeft(); // Turn to the left
+          moveCM(40, 1, MAXSPEED); // Move the robot 40 cm forward to a higher speed. 
+          do {
+            followLine(MAXSPEED); // Follow the inner walls to high speed
+            readDistance(currentPosition); // Update 'currentPosition'
+          } while (currentPosition[3] > 100); // Repeat while the left distance is more than 100 cm
+          break;
+
+```
+
+In the case of the first color detected being orange, assign it as 2 in the camera, and call the turnRight function.
+
+``` ino
+ case ORANGE: // If detect an orange object.
+          Serial3.println("ORANGE"); // Print "ORANGE" in the serial monitor
+          if (!colorDetected) { // If any color has not been detected previously.
+            colorDetected = true; // Mark color detected
+            firstColorDetected = ORANGE; // Stablish the first color detected as orange 
+          }
+          if (colorDetected && firstColorDetected == BLUE) { // If blue has already been detected.
+            go to blue; // Jump to the blue color section. 
+          }
+Orange: // Tag the orange object.
+          center(); // Center the servomotor.
+          readDistance(currentPosition); // Update 'currentPosition'
+          readDistance(lastPosition); // Update 'lastPosition'
+          while ((currentPosition[2] < 100)) { // while the right distance is less than 100 cm
+            followLine(SPEED2); // Follow the inner wall to 'SPEED2'
+            readDistance(currentPosition); // Update 'currentPosition'
+          }
+          turnRight(); // Turn to the right.
+          moveCM(40, 1, MAXSPEED); // Move the robot 40 cm forward to a higher speed.
+          do {
+            followLine(MAXSPEED); // Follow the inner Wall to a higher. 
+            readDistance(currentPosition); // Update 'currentPosition'
+          } while (currentPosition[2] > 100); // Repeat while the right distance is more than 100 cm
+          break;
+      }
+
+```
 
 ## Distance sensor (ToF) VL53L0X
 [![vl53l0x.png](https://i.postimg.cc/C1gmrb0m/vl53l0x.png)](https://postimg.cc/jWMHLwL7) [![vl53l0x-1.png](https://i.postimg.cc/Tw3WPPJT/vl53l0x-1.png)](https://postimg.cc/JySh6MFF)
@@ -142,6 +315,50 @@ distances with a higher precision. This sensor lets the robot
 have a better understanding of its position and allows the
 ability to park at the end of the third turning in the game field
 by its potential to detect distances at millimeters.
+
+### Code
+
+#### Closed challenge
+ First of all, we include the library `<DFRobot_VL53L0X>` to facilitate the sensor usage while the library Wire.h to start the communication I2C.
+
+ ```ino
+#include <Wire.h> // Library to communicate I2C.
+#include <DFRobot_VL53L0X.h> // Library to the VL53L0X distance sensor.
+ #define SENSORCOUNT 1 // Define the sensor`s number VL53L0X.
+
+
+ DFRobot_VL53L0X sensors[SENSORCOUNT]; // Create an array of sensors VL53L0X.
+ const uint8_t xshutPins[SENSORCOUNT] = { 38 }; // Pin to enable or disenable the sensor VL53L0X.
+
+
+void initSensor() {
+  Wire.begin(); // Begin the communication I2C
+
+
+  for (uint8_t i = 0; i < SENSORCOUNT; i++) {
+    pinMode(xshutPins[i], OUTPUT); // Setting the sensor`s off pin as an output. 
+    digitalWrite(xshutPins[i], LOW); // Turn off the corresponding sensor. 
+  }
+
+
+  for (uint8_t i = 0; i < SENSORCOUNT; i++) {
+    pinMode(xshutPins[i], INPUT); // Configure the sensor`s off pin as an input to restar the sensor.
+    delay(10); // Delay 10 ms to restart the sensor
+    sensors[i].begin(0x2A + (i * 2)); // Start the sensor with the specific direction I2C
+    sensors[i].setMode(sensors[i].eContinuous, sensors[i].eHigh); // Configure the continuous mode and the high precision.
+    sensors[i].start(); // Start the sensor measurement.
+  }
+}
+ ```
+
+We create an array to upload the distance detected by the sensor.
+
+``` ino
+void readDistance(unsigned int* array) {
+  array[0] = sensors[0].getDistance(); // Upload the distance measured by the frontal sensor.
+```
+
+
 
 ## Ultrasonic sensor (HC-S04)
 [![Medidas-de-sensor-ultrasonido-HC-SR04.jpg](https://i.postimg.cc/mgdP54Gq/Medidas-de-sensor-ultrasonido-HC-SR04.jpg)](https://postimg.cc/FYLFY2zg)
@@ -162,6 +379,55 @@ a maximum detection of 4 meters, these sensors are ideal for
 the game field size, which measures 3m x 3m. thanks to
 them, the robot has a higher perception of its position and
 anticipate possible coalitions effectively.
+
+### Code
+
+#### Open challenge
+ To facilitate the frequency conversion of the reception of the vibes in cm, use the library `<Ultrasonic.h>` and subsequently, define each sensor pin with Ultrasonic and the name given to the sensor followed by the (Trig, Echo).
+
+``` ino
+#include <Ultrasonic.h> // Library to manage ultrasonic sensors.
+#define USTRIGHT A13 // Define the signal pin to the right ultrasonic sensor.
+#define USERIGHT A12 // Define the echo pin to the right ultrasonic sensor.
+#define USTLEFT A14 // Define the signal pin to the left ultrasonic sensor
+#define USELEFT A15 // Define the echo pin to the left ultrasonic sensor.
+
+
+Ultrasonic USRight(USTRIGHT, USERIGHT); // Instance to the right ultrasonic sensor.
+Ultrasonic USLeft(USTLEFT, USELEFT); // Instance to the left ultrasonic sensor.
+
+
+int firstPosition[4]; // Array to upload the first position detected. 
+int lastPosition[4]; // Array to upload the last position detected.
+int currentPosition[4]; // Array to upload the current position detected.
+int tempPosition[4]; // Array to upload the detected position temporarily.
+
+
+void readDistance(unsigned int* array) {
+  array[2] = USRight.read(); // Upload the distance measure by the right ultrasonic sensor.
+  array[3] = USLeft.read(); // Upload the distance measure by the left ultrasonic sensor.
+}
+```
+
+Considering the values of the firstPosition, lastPosition, currentPosition and tempPosition, the robot does a correction to evade collisions both with the outer and inner wall staying centered.
+
+``` ino
+if (DEBUG2) printDistance(currentPosition); // Print the distances if DEBUG2 is active.
+  if (tempPosition[2] < tempPosition[3]) { // If the right distance is less than the left position
+    grade = map(currentPosition[2], tempPosition[2] - LMIN, tempPosition[2] + LMIN, TURNGRADE, -TURNGRADE); // Map the angle correction to the right.
+    if (DEBUG) Serial3.println("1 Actual: " + String(currentPosition[2]) + ". Inicial: " + String(tempPosition[2])); // Depuration
+  } else { // If the left distance is less or equal to the right 
+    grade = map(currentPosition[3], tempPosition[3] - LMIN, tempPosition[3] + LMIN, -TURNGRADE, TURNGRADE); // Map the correction angle to the left.
+    if (DEBUG) Serial3.println("2 Actual: " + String(currentPosition[3]) + ". Inicial: " + String(tempPosition[3])); // Depuration
+  }
+  if (DEBUG) Serial3.println("Grades : " + String(grade)); // Print the correction angle calculated.
+  if (grade > TURNGRADE) { // Limit the higher turning angle.
+    grade = TURNGRADE;
+  } else if (grade < TURNGRADE * -1) { // Limit the lower turning angle
+    grade = -TURNGRADE;
+  }
+
+```
 
 ## Battery and charger
 [![REV-31-1302-12-VSlim-Battery-New-FINAL-87390.jpg](https://i.postimg.cc/L80sVVtF/REV-31-1302-12-VSlim-Battery-New-FINAL-87390.jpg)](https://postimg.cc/pmzxWzcs) [![AA-Ni-Mh-Battery-Charger-noflag-08282.jpg](https://i.postimg.cc/CMHL20GN/AA-Ni-Mh-Battery-Charger-noflag-08282.jpg)](https://postimg.cc/qgqTt9Zh)
@@ -210,6 +476,48 @@ as well as greater management thanks to its encoder which
 lets us have better precision in the turns that the robot should
 do in the game field.
 
+### Code
+
+#### Open
+
+Firstly, we defined the variables that go in the H bridge and at
+the same time connected the motor that is called `IN1` and IN2,
+equally, we defined 3 different speeds (`MAXSPEED`,
+`TURNSSPEED`, `SPEED2`) that could be inside of a range
+between 255 and 0.
+
+``` ino
+#define IN1 4 // Define the control pin of the motor IN1.
+#define IN2 5 // Define the control pin of the motor IN2.
+
+
+#define MAXSPEED 250 //Higher Speed of the motor.
+#define TURNSPEED 180 // turnings Speed.
+#define SPEED2 140 // secundary Speed.
+
+
+void stop() {
+  if (DEBUG) Serial3.println("Stop"); // Print "Stop" in the serial monitor if the mode depuration is active.
+  digitalWrite(IN1, LOW); // Turn off the motor in the IN1 direction.
+  digitalWrite(IN2, LOW); // Turn off the motor in the IN2 direction.
+}
+
+
+void forward(byte speed) {
+  if (DEBUG2) Serial3.println("Forward " + String(speed)); // Print "Forward" and the speed if DEBUG2 is active.
+  analogWrite(IN1, speed); // Assign the speed in IN1 to go forward.
+  digitalWrite(IN2, LOW); 
+}
+
+
+void backward(byte speed) {
+  if (DEBUG) Serial3.println("Backward " + String(speed)); // Print "Backward" and the speed if DEBUG is active.
+  digitalWrite(IN1, LOW); // turn off IN1 to return
+  analogWrite(IN2, speed);
+}
+
+```
+
 ## LM2596 HW-411 Step down
 [![XL6009-Module-Pinout.jpg](https://i.postimg.cc/Vv6fMrJk/XL6009-Module-Pinout.jpg)](https://postimg.cc/LYcFFskc)
 
@@ -226,4 +534,41 @@ supply, which prevents failures in the components, and also
 increases the stability and movement of the robot in its
 performance.
 
-# Floors of the robot
+# Robot floors
+The robot is made up of four floors
+listed from button to top.
+
+## First and Second Floor
+Both floors are connected themselves including the Steering system and the Driven
+system.
+
+### Front Axle
+The front axle of our robot is located in a steering system boosted by a servo
+(Mg90s). this system counts with two wings, a superior one and a lower one, that
+allow an appropriate Caster, between the wings we can find the pivots which count
+with two bearings that facilitate the free movement of the wheels and avoid an
+incorrect Camber, both pivots includes a steering arm which is connected through
+the Tie Rod.
+
+Movement transmission is carried out by the servo connected to the Tie Rod. This
+is connected at the same time with the Steering Arm of the right Wheel to make the
+movement transmission we use the Steering Linkage that is connected to the left
+steering arm. The Tie Rod has a screw thread which allows an adjustable Toe. The
+tire rod and the steering linkage count with the rod end at the ends give us a wide
+work range. making it much easier to integrate the servo with the steering system.
+
+### Back Alxe
+In the back of the robot, we can find the driven system (the wheels and the motor).
+This motor transmits the movement through a chain and two sprockets a small one
+with 10 teeth that is connected to the shaft and the bigger one with 15 teeth which
+is connected to the motor. in this setting the velocity increases x1.5, resulting in a
+rated speed of 540RPM. also, the ring for the wheels was modified to fit with a
+5mm hexagonal shaft, which makes the movement transmission and the assembly
+easier.
+
+## Third Floor.
+On the third floor, the robot has different electronic components that are essential. It is located the battery which provides the needed energy to the proper function of the robot. As well as the camera that let get images and detect obstacles. Besides, the ultrasonic sensors and the laser sensor are included, and each one sets in its respective support that helps with its positioning and functioning.
+
+
+## Fourth floor.
+On the fourth robot`s floor is located the controller and near it the shield, which organizes all the electric connections, including the feeding. The connections are soldered, avoiding accidental disconnection, and minimizing the errors and accidents during the robot's manipulation.

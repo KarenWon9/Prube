@@ -1,17 +1,5 @@
-### Front perspective
-[![v-photos.jpg](https://i.postimg.cc/50qm86Y4/v-photos.jpg)](https://postimg.cc/dk3dYQjp)
+# Open challenge 
+[![Video Thumbnail](https://img.youtube.com/vi/k0pksAf_WJw/hqdefault.jpg)](https://www.youtube.com/watch?v=k0pksAf_WJw)
 
-### Rear perspective
-[![v-photos.jpg](https://i.postimg.cc/50qm86Y4/v-photos.jpg)](https://postimg.cc/dk3dYQjp)
-
-### Right perspective
-[![Pespectiva-derecha.jpg](https://i.postimg.cc/nzwgJfCv/Pespectiva-derecha.jpg)](https://postimg.cc/jwPZH965)
-
-### Left perspective
-[![Perspectiva-izquierda.jpg](https://i.postimg.cc/65NJ5wM0/Perspectiva-izquierda.jpg)](https://postimg.cc/s1K0TFdQ)
-
-### Top perspective
-[![Perspectiva-superior.jpg](https://i.postimg.cc/Twm7Z5vX/Perspectiva-superior.jpg)](https://postimg.cc/jwx4f5j8)
-
-### Bottom perspective
-[![Perspectiva-inferior.jpg](https://i.postimg.cc/X7NLgzqW/Perspectiva-inferior.jpg)](https://postimg.cc/9zSym1yg)
+# Close challenge
+[![Video Thumbnail](https://img.youtube.com/vi/OPPGRvdrE08/hqdefault.jpg)](https://www.youtube.com/watch?v=OPPGRvdrE08)
