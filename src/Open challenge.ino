@@ -197,7 +197,8 @@ void followLine(byte speed) {
     grade = map(currentPosition[2], tempPosition[2] - LMIN, tempPosition[2] + LMIN, TURNGRADE, -TURNGRADE); // Map the angle correction to the right.   
  if (DEBUG) Serial3.println("1 Actual: " + String(currentPosition[2]) + ". Inicial: " + String(tempPosition[2])); 
   } else { // If the left distance is less or equal to the right 
-    grade = map(currentPosition[3], tempPosition[3] - LMIN, tempPosition[3] + LMIN, -TURNGRADE, TURNGRADE); // Map the angle correction to the left.    if (DEBUG) Serial3.println("2 Actual: " + String(currentPosition[3]) + ". Inicial: " + String(tempPosition[3])); 
+    grade = map(currentPosition[3], tempPosition[3] - LMIN, tempPosition[3] + LMIN, -TURNGRADE, TURNGRADE); // Map the angle correction to the left.    
+ if (DEBUG) Serial3.println("2 Actual: " + String(currentPosition[3]) + ". Inicial: " + String(tempPosition[3])); 
   }
   if (DEBUG) Serial3.println("Grados : " + String(grade)); 
   if (grade > TURNGRADE) { // Limit the top angle turning.
