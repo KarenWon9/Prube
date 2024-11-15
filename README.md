@@ -25,7 +25,7 @@
     - [Third floor](#third-floor)
     - [Fourth floor](#fourth-floor)
         
-- 4.[ 3D desing](models/)
+- 4.[ 3D design](models/)
     -
     - [Parts list](models/README.md#parts-list)
     - [Printing settings and recommendations](models/README.md#printing-settings-and-recommendations)
@@ -57,9 +57,9 @@
 <!---------------------------------------------espanol-------------------------------------------------------- -->
 
 # Introduction 
-The team Spark is a team from the Salto Angel School that is participating in the World Robot Olympiad 2024 (WRO) in the future engineers’ category. This team is comprised of three students: Victoria Saez, the new Captain who is in charge of the programming part: Sebastian Salinas, who is responsible for the designing and mechanicals of the robot: and finally Rosa Wong who attends the mechanic-electronic-documentation, is also a university student at the Rafael Urdaneta University.
+Spark is a team from the Salto Angel School participating in the World Robot Olympiad 2024 (WRO) in the future engineers’ category. This team is comprised of three students: Victoria Saez, the new Captain who is in charge of the programming and electronic parts; Sebastian Salinas, who is responsible for the designing and mechanicals of the robot: and finally Rosa Wong who attends the mechanic-electronic documentation, is also a university student at the Rafael Urdaneta University.
 
-The World Robot Olympiad (WRO) is an event where young people from different parts of the world meet to show their knowledge and abilities in diverse categories. The future engineers' category is based on the creation of an autonomous robot capable of traveling around a game field that measures 3m x 3m using obstacles in it or without them. Every year, the rules and challenges partially change and every four or five years represents a different challenge.
+The World Robot Olympiad (WRO) is an event where young people from different parts of the world meet to show their knowledge and abilities in diverse categories. The future engineers' category is based on creating an autonomous robot capable of moving around a game field that measures 3m x 3m using obstacles in it or without them. Every year, the rules and challenges partially change and every four or five years represents a different challenge.
 
 This report explains the components and parts of the robot built and designed by Team Spark to afford all the competition`s challenges.
 
@@ -129,13 +129,13 @@ To make easier its use, we employed the library "Servo.h" and created a variable
 #include <Servo.h> // Library to control servomotors.
 
 
-#define SERVOPIN 9 // Define the pin to the servomotor.
+#define SERVOPIN 9 // Define the pin for the servomotor.
 
 
-#define TURNGRADE 30 // Define the turning grades to the correct direction
-#define CENTERVALUE 90 // Center value to the servomotor (straight).
-#define MAXLEFT 156 // Higher value towards the left to the servomotor.
-#define MAXRIGHT 5 // Higher value towards the right to the servomotor.
+#define TURNGRADE 30 // Define the turning grades for the correct direction
+#define CENTERVALUE 90 // Center value for the servomotor (straight).
+#define MAXLEFT 156 // Top value towards the left for the servomotor.
+#define MAXRIGHT 5 // Top value towards the right for the servomotor.
 
 
 Servo direction; // Create an instance of the servomotor.
@@ -149,7 +149,7 @@ void center() {
 
 void turnLeft() {
   if (DEBUG) Serial3.println("Left"); // Print "Left" if DEBUG is active.
-  direction.write(MAXLEFT); // Turn the servomotor at maximum to the left.
+  direction.write(MAXLEFT); // Turn the servomotor at the top to the left.
   direction.write(MAXLEFT); // Repeat the writing with precision.
   setMove(500, 1, TURNSPEED); // Perform the movement with 500 ticks in direction1 (forward) to TURNSPEED.
   center(); // Center the servomotor after the turning.
@@ -159,7 +159,7 @@ void turnLeft() {
 
 void turnRight() {
   if (DEBUG) Serial3.println("Right"); // Print "right" if DEBUG is active.
-  direction.write(MAXRIGHT); // Turn the servomotor at maximum to the right
+  direction.write(MAXRIGHT); // Turn the servomotor at the top to the right
   direction.write(MAXRIGHT); // Repeat the writing with precision.
   setMove(760, 1, MAXSPEED); // Perform the movement with 760 ticks in direction1 (forward) to MAXSPEED.
   center(); // Center the servomotor after the turning.
@@ -223,7 +223,7 @@ light is needed for the perception of the colors we will implement the
 Pixy2 pixy; // Create an object of the Pixy2 camera.
 
 
-byte firstColorDetected = NONE; // Variable to save the first detected color.
+byte firstColorDetected = NONE; // Variable to save the first color detected.
 bool colorDetected = false; // Indicate if a color is detected.
 
 
@@ -260,9 +260,9 @@ Blue: // Tag the blue object.
             readDistance(currentPosition); // Update 'currentPosition'
           }
           turnLeft(); // Turn to the left
-          moveCM(40, 1, MAXSPEED); // Move the robot 40 cm forward to a higher speed. 
+          moveCM(40, 1, MAXSPEED); // Move the robot 40 cm forward to high-speed. 
           do {
-            followLine(MAXSPEED); // Follow the inner walls to high speed
+            followLine(MAXSPEED); // Follow the inner walls to top-speed
             readDistance(currentPosition); // Update 'currentPosition'
           } while (currentPosition[3] > 100); // Repeat while the left distance is more than 100 cm
           break;
@@ -290,9 +290,9 @@ Orange: // Tag the orange object.
             readDistance(currentPosition); // Update 'currentPosition'
           }
           turnRight(); // Turn to the right.
-          moveCM(40, 1, MAXSPEED); // Move the robot 40 cm forward to a higher speed.
+          moveCM(40, 1, MAXSPEED); // Move the robot 40 cm forward to high-speed.
           do {
-            followLine(MAXSPEED); // Follow the inner Wall to a higher. 
+            followLine(MAXSPEED); // Follow the inner Wall to top-speed. 
             readDistance(currentPosition); // Update 'currentPosition'
           } while (currentPosition[2] > 100); // Repeat while the right distance is more than 100 cm
           break;
@@ -332,7 +332,7 @@ by its potential to detect distances at millimeters.
 
 
 void initSensor() {
-  Wire.begin(); // Begin the communication I2C
+  Wire.begin(); // Start the I2C communication.
 
 
   for (uint8_t i = 0; i < SENSORCOUNT; i++) {
@@ -342,9 +342,9 @@ void initSensor() {
 
 
   for (uint8_t i = 0; i < SENSORCOUNT; i++) {
-    pinMode(xshutPins[i], INPUT); // Configure the sensor`s off pin as an input to restar the sensor.
+    pinMode(xshutPins[i], INPUT); // Configure the sensor`s off pin as an input to restart the sensor.
     delay(10); // Delay 10 ms to restart the sensor
-    sensors[i].begin(0x2A + (i * 2)); // Start the sensor with the specific direction I2C
+    sensors[i].begin(0x2A + (i * 2)); 
     sensors[i].setMode(sensors[i].eContinuous, sensors[i].eHigh); // Configure the continuous mode and the high precision.
     sensors[i].start(); // Start the sensor measurement.
   }
@@ -371,7 +371,7 @@ void readDistance(unsigned int* array) {
 | **Input Trigger signal**  | Input 10μs TTL | **Pulso Echo** | Output 100-25000 μs TTL |
 
 The ultrasonic sensors are essential in our robot because
-let calculate distances by using ultrasonic vibes. These
+let`s calculate distances by using ultrasonic vibes. These
 sensors own a transmitter that sends the vibe and a receiver
 to detect the echo of the reflexive vibes which lets us
 determine the distance by the time it takes to come back with
@@ -383,24 +383,24 @@ anticipate possible coalitions effectively.
 ### Code
 
 #### Open challenge
- To facilitate the frequency conversion of the reception of the vibes in cm, use the library `<Ultrasonic.h>` and subsequently, define each sensor pin with Ultrasonic and the name given to the sensor followed by the (Trig, Echo).
+ To facilitate the frequency conversion of the Vibes reception in cms, use the library `<Ultrasonic.h>` and subsequently, define each sensor pin with Ultrasonic and the name given to the sensor followed by the (Trig, Echo).
 
 ``` ino
 #include <Ultrasonic.h> // Library to manage ultrasonic sensors.
-#define USTRIGHT A13 // Define the signal pin to the right ultrasonic sensor.
-#define USERIGHT A12 // Define the echo pin to the right ultrasonic sensor.
-#define USTLEFT A14 // Define the signal pin to the left ultrasonic sensor
-#define USELEFT A15 // Define the echo pin to the left ultrasonic sensor.
+#define USTRIGHT A13 // Define the signal pin for the right ultrasonic sensor.
+#define USERIGHT A12 // Define the echo pin for the right ultrasonic sensor.
+#define USTLEFT A14 // Define the signal pin for the left ultrasonic sensor
+#define USELEFT A15 // Define the echo pin for the left ultrasonic sensor.
 
 
-Ultrasonic USRight(USTRIGHT, USERIGHT); // Instance to the right ultrasonic sensor.
-Ultrasonic USLeft(USTLEFT, USELEFT); // Instance to the left ultrasonic sensor.
+Ultrasonic USRight(USTRIGHT, USERIGHT); // Instance for the right ultrasonic sensor.
+Ultrasonic USLeft(USTLEFT, USELEFT); // Instance to for left ultrasonic sensor.
 
 
 int firstPosition[4]; // Array to upload the first position detected. 
 int lastPosition[4]; // Array to upload the last position detected.
 int currentPosition[4]; // Array to upload the current position detected.
-int tempPosition[4]; // Array to upload the detected position temporarily.
+int tempPosition[4]; // Array to upload the temporary position detected.
 
 
 void readDistance(unsigned int* array) {
@@ -420,7 +420,7 @@ if (DEBUG2) printDistance(currentPosition); // Print the distances if DEBUG2 is 
     grade = map(currentPosition[3], tempPosition[3] - LMIN, tempPosition[3] + LMIN, -TURNGRADE, TURNGRADE); // Map the correction angle to the left.
     if (DEBUG) Serial3.println("2 Actual: " + String(currentPosition[3]) + ". Inicial: " + String(tempPosition[3])); // Depuration
   }
-  if (DEBUG) Serial3.println("Grades : " + String(grade)); // Print the correction angle calculated.
+  if (DEBUG) Serial3.println("Grades : " + String(grade)); // Print the angle calculated correction.
   if (grade > TURNGRADE) { // Limit the higher turning angle.
     grade = TURNGRADE;
   } else if (grade < TURNGRADE * -1) { // Limit the lower turning angle
@@ -454,7 +454,7 @@ on international trips by airplane because it is made with
 nickel which is safe for its transport.
 
 Lastly, it is a prefabricated battery and offers a superior
-level of security and efficiency compared to the settings of
+level of security and efficiency as compared to the settings of
 individual batteries.
 
 ## Motor GA37-520
@@ -473,7 +473,7 @@ to 12V, they are capable of going at a nominal speed of
 250rpm and a 3,5 kg torque. Therefore using just a 12V motor
 is enough to give it the speed, control, and attraction needed,
 as well as greater management thanks to its encoder which
-lets us have better precision in the turns that the robot should
+let us have better precision in the turns that the robot should
 do in the game field.
 
 ### Code
@@ -487,11 +487,11 @@ equally, we defined 3 different speeds (`MAXSPEED`,
 between 255 and 0.
 
 ``` ino
-#define IN1 4 // Define the control pin of the motor IN1.
-#define IN2 5 // Define the control pin of the motor IN2.
+#define IN1 4 // Define IN1 to the motor control pin.
+#define IN2 5 // Define IN2 to the motor control pin.
 
 
-#define MAXSPEED 250 //Higher Speed of the motor.
+#define MAXSPEED 250 // Top-Speed of the motor.
 #define TURNSPEED 180 // turnings Speed.
 #define SPEED2 140 // secundary Speed.
 
@@ -545,9 +545,9 @@ system.
 ### Front Axle
 The front axle of our robot is located in a steering system boosted by a servo
 (Mg90s). this system counts with two wings, a superior one and a lower one, that
-allow an appropriate Caster, between the wings we can find the pivots which count
+allow an appropriate Caster, between the wings we can find the pivots that count
 with two bearings that facilitate the free movement of the wheels and avoid an
-incorrect Camber, both pivots includes a steering arm which is connected through
+incorrect Camber, both pivots include a steering arm which is connected through
 the Tie Rod.
 
 Movement transmission is carried out by the servo connected to the Tie Rod. This
